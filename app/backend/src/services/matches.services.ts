@@ -1,4 +1,4 @@
-import IMatches, { IMessage } from '../interfaces/matches';
+import { IMatches, IMessage, IBody } from '../interfaces/matches';
 import Match from '../database/models/Match.model';
 import TeamsService from './teams.services';
 
@@ -29,5 +29,26 @@ export default abstract class MatchesService {
     const matchList = data.message as IMessage[];
     const filteredData = matchList.filter(({ inProgress }) => inProgress === queryBool);
     return { type: null, message: filteredData };
+  }
+
+  static async postMatch(body: IBody) {
+    const { homeTeamId, awayTeamId } = body;
+    const homeTeam = await Match.findByPk(homeTeamId);
+    const awayTeam = await Match.findByPk(awayTeamId);
+    if (!homeTeam || !awayTeam) return { type: 'error', message: 'There is no team with such id!' };
+    const { dataValues } = await Match.create({ ...body, inProgress: true });
+    return { type: null, message: dataValues };
+  }
+
+  static async finishMatch(id: number) {
+    const [affectedRows] = await Match.update({ inProgress: false }, { where: { id } });
+    if (affectedRows < 1) return { type: 'error', message: 'This match is already over' };
+    return { type: null, message: 'Finished' };
+  }
+
+  static async updateMatches(body: IBody, id: number) {
+    const [affectedRows] = await Match.update({ ...body }, { where: { id } });
+    if (affectedRows < 1) return { type: 'error', message: 'Match does not exist' };
+    return { type: null, message: 'Updated' };
   }
 }

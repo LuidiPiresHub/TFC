@@ -12,11 +12,14 @@ export interface IMessage {
   }
 }
 
-export interface IProgress {
-  inProgress: string,
-}
-
-export default interface IMatches {
+export interface IMatches {
   type: string | null,
   message: string | IMessage[]
+}
+
+export interface IBody {
+  homeTeamId: number,
+  awayTeamId: number,
+  homeTeamGoals: number,
+  awayTeamGoals: number,
 }
