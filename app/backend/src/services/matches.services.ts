@@ -23,7 +23,6 @@ export default abstract class MatchesService {
 
   static async getMatchesByQuery(query: string) {
     const queryBool = query === 'true';
-    console.log(queryBool);
     const data = await this.getMatches();
     if (!data) return { type: 'error', message: 'Cannot get Matches' };
     const matchList = data.message as IMessage[];

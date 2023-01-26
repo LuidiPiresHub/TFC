@@ -6,7 +6,6 @@ import validateMatches from '../middlewares/matches';
 const router = Router();
 
 router.get('/', MatchesController.getMatches);
-router.get('/?', MatchesController.getMatchesByQuery);
 router.post('/', validateToken, validateMatches, MatchesController.postMatch);
 router.patch('/:id/finish', MatchesController.finishMatch);
 router.patch('/:id', MatchesController.updateMatches);
