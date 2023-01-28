@@ -31,7 +31,7 @@ export default class LeaderboardService {
 
   static async getLeaderboardData() {
     const allTeams = await Team.findAll();
-    if (allTeams.length === 0) return [];
+    if (!allTeams.length) return [];
     const data = await this.homeTeams();
     return data.map((team, index) => ({
       name: allTeams[index].teamName,
